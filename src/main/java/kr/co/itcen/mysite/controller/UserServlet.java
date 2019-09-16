@@ -1,11 +1,16 @@
 package kr.co.itcen.mysite.controller;
 
+
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.co.itcen.mysite.dao.GuestbookDao;
+import kr.co.itcen.mysite.vo.GuestbookVo;
 import kr.co.itcen.web.WebUtils;
 
 public class UserServlet extends HttpServlet {
