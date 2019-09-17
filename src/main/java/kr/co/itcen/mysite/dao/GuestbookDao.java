@@ -60,7 +60,7 @@ public class GuestbookDao {
 		try {
 			connection = getConnection();
 			
-			String sql = "insert into guestbook values(null, ?, ?, ?, now())";
+			String sql = "insert into guestbook(no,name,password,contents,reg_date) values(null, ?, ?, ?, now())";
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, vo.getName());
 			pstmt.setString(2, vo.getPassword());
@@ -160,8 +160,7 @@ public class GuestbookDao {
 		try {
 			Class.forName("org.mariadb.jdbc.Driver");
 		
-			String url = "jdbc:mariadb://192.168.1.42:3306/bookmall?characterEncoding=utf8";
-			connection = DriverManager.getConnection(url, "bookmall", "bookmall");
+			connection = DriverManager.getConnection(ConnectionInfo.URL, ConnectionInfo.USER, ConnectionInfo.PASSWORD);
 		
 		} catch (ClassNotFoundException e) {
 			System.out.println("Fail to Loading Driver:" + e);
