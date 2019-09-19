@@ -15,5 +15,5 @@ public class LoginFormAction implements Actionable{
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		WebUtils.forward(request, response, "/WEB-INF/views/user/loginform.jsp");	
 	}
-
+	
 }

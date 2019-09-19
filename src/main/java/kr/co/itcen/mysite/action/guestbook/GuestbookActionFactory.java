@@ -11,7 +11,6 @@ public class GuestbookActionFactory extends ActionFactory{
 		// TODO Auto-generated method stub
 		Actionable action = null;
 		if("insert".equals(actionName)) {	//방명록 남기기
-			System.out.println(actionName);
 			action = new AddAction();
 		} else if("deleteform".equals(actionName)) {
 			action = new DeleteFormAction();

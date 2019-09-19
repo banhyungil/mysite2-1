@@ -16,7 +16,6 @@ public class GuestbookServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
 		String actionName = request.getParameter("a");
 
 		ActionFactory actionFactory = new GuestbookActionFactory();

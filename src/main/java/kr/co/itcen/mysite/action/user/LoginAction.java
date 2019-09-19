@@ -32,7 +32,6 @@ public class LoginAction implements Actionable{
 		//session.setMaxInactiveInterval(SessionInfo.sessionLifeTime);
 		
 		WebUtils.redirect(request, response, request.getContextPath());
-		
 	}
 
 }

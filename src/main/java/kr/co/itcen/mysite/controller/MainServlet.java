@@ -17,13 +17,19 @@ public class MainServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		request.setCharacterEncoding("UTF-8");
 		String actionName = request.getParameter("a");
 		
 		ActionFactory actionFactory = new MainActionFactory();
 		Actionable action = actionFactory.getAction("");
 		action.execute(request, response);
 		
+	}
+
+	@Override
+	public void init() throws ServletException {
+		String configPath = getServletConfig().getInitParameter("config");
+		System.out.println(configPath);
+		super.init();
 	}
 
 	@Override

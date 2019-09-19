@@ -10,11 +10,24 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <context-param>
+  	<param-name>contextConfigLocation</param-name>
+  	<param-value>/WEB-INF/applicationContext.xml</param-value>
+  </context-param>
+  
+  <listener>
+    <listener-class>kr.co.itcen.web.listener.ContextLoadListener</listener-class>
+  </listener>
+  
   <servlet>
     <description></description>
     <display-name>MainServlet</display-name>
     <servlet-name>MainServlet</servlet-name>
     <servlet-class>kr.co.itcen.mysite.controller.MainServlet</servlet-class>
+    <init-param>
+      <param-name>config</param-name>
+      <param-value>/WEB-INF/servlet-context.xml</param-value>
+    </init-param>
   </servlet>
   <servlet-mapping>
     <servlet-name>MainServlet</servlet-name>
@@ -40,4 +53,28 @@
     <servlet-name>GuestbookServlet</servlet-name>
     <url-pattern>/gb</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LifeCircleServlet</display-name>
+    <servlet-name>LifeCircleServlet</servlet-name>
+    <servlet-class>kr.co.itcen.mysite.controller.LifeCircleServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LifeCircleServlet</servlet-name>
+    <url-pattern>/LC</url-pattern>
+  </servlet-mapping>
+  <filter>
+    <display-name>EncodingFilter</display-name>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>kr.co.itcen.web.filter.EncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>utf-8</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
 </web-app>
