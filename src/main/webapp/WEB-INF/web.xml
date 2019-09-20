@@ -9,16 +9,13 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
-  
   <context-param>
-  	<param-name>contextConfigLocation</param-name>
-  	<param-value>/WEB-INF/applicationContext.xml</param-value>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/applicationContext.xml</param-value>
   </context-param>
-  
   <listener>
     <listener-class>kr.co.itcen.web.listener.ContextLoadListener</listener-class>
   </listener>
-  
   <servlet>
     <description></description>
     <display-name>MainServlet</display-name>
@@ -76,5 +73,14 @@
     <filter-name>EncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-  
+  <servlet>
+    <description></description>
+    <display-name>BoardServlet</display-name>
+    <servlet-name>BoardServlet</servlet-name>
+    <servlet-class>kr.co.itcen.mysite.controller.BoardServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>BoardServlet</servlet-name>
+    <url-pattern>/board</url-pattern>
+  </servlet-mapping>
 </web-app>
