@@ -18,14 +18,16 @@ public class BoardDao {
 	Statement stmt;
 	ResultSet rs;
 
-	public List<BoardVo> getList(int pageRows){
+	public List<BoardVo> getList(int pageRows, int page){
 		connection();
 		List<BoardVo> list = new ArrayList<BoardVo>();
 
-		String sql = "select b.*, u.name from board b, user u where b.user_no = u.no order by g_no, o_no limit ?";
+		String sql = "select b.*, u.name from board b, user u where b.user_no = u.no order by g_no, o_no, depth limit ?, ?";
 		try {
+			int beginRow = (page - 1) * pageRows;
 			pstmt = connection.prepareStatement(sql);
-			pstmt.setInt(1, pageRows);
+			pstmt.setInt(1, beginRow);
+			pstmt.setInt(2, pageRows);
 			
 			rs = pstmt.executeQuery();
 			
@@ -40,6 +42,7 @@ public class BoardDao {
 				vo.setTitle(rs.getString("title"));
 				vo.setUserName(rs.getString("name"));
 				vo.setUserNo(rs.getInt("user_no"));
+				vo.setDepth(rs.getInt("depth"));
 				
 				list.add(vo);
 			}
@@ -51,19 +54,22 @@ public class BoardDao {
 		}
 
 		return list;
-	} 
+	}
 	
-	public List<BoardVo> getList(String keyword, int pageRows) {
+	public List<BoardVo> getList(String keyword, int pageRows, int page) {
 		connection();
 		List<BoardVo> list = new ArrayList<BoardVo>();
 		
 		keyword = "%" + keyword + "%";				//Like 연산자를 위함
-		String sql = "select b.*, u.name from board b, user u where b.user_no = u.no and (title like ? or contents like ?) order by g_no, o_no limit ?";
+		String sql = "select b.*, u.name from board b, user u where b.user_no = u.no and (title like ? or contents like ?) order by g_no, o_no, depth  limit ?,?";
 		try {
+			int beginRow = (page - 1) * pageRows;
+			
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			pstmt.setString(2, keyword);
-			pstmt.setInt(3, pageRows);
+			pstmt.setInt(3, beginRow);
+			pstmt.setInt(4, pageRows);
 			rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -77,6 +83,7 @@ public class BoardDao {
 				vo.setTitle(rs.getString("title"));
 				vo.setUserName(rs.getString("name"));
 				vo.setUserNo(rs.getInt("user_no"));
+				vo.setDepth(rs.getInt("depth"));
 				
 				list.add(vo);
 			}
@@ -89,6 +96,50 @@ public class BoardDao {
 		}
 		
 		return list;
+	}
+	
+	public Integer getListCount() {
+		connection();
+		int count = 0;
+		
+		String sql = "select count(*) from board";
+		try {
+			pstmt = connection.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			
+			if(rs.next())
+				count = rs.getInt(1);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return count;
+	}
+	
+	public int getListCount(String keyword) {
+		connection();
+		int count = 0;
+		
+		keyword = "%" + keyword + "%";
+		String sql = "select count(*) from board where title like ? or contents like ?";
+		try {
+			pstmt = connection.prepareStatement(sql);
+			pstmt.setString(1, keyword);
+			pstmt.setString(2, keyword);
+			rs = pstmt.executeQuery();
+			
+			
+			if(rs.next())
+				count = rs.getInt(1);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return count;
 	}
 	
 	public Boolean insert(String title, String content, Long userNo) {
@@ -137,7 +188,7 @@ public class BoardDao {
 			int count = pstmt.executeUpdate();
 			result = (count > 0);
 			
-			update(vo.getgNo());
+			update(vo.getgNo(), vo.getDepth() + 1);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -196,6 +247,7 @@ public class BoardDao {
 				vo.setRegDate(rs.getString("reg_date"));
 				vo.setTitle(rs.getString("title"));
 				vo.setUserName(rs.getString("name"));
+				vo.setDepth(rs.getInt("depth"));
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -227,15 +279,15 @@ public class BoardDao {
 		return result;
 	}
 	
-	public Boolean update(int gNo) {
+	public Boolean update(int gNo, int depth) {
 		Boolean result = false;
 		
 		connection();
-		String sql = "update board set o_no = o_no + 1 where g_no=?";
+		String sql = "update board set o_no = o_no + 1 where g_no=? and depth = ?";
 		try {
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, gNo);
-	
+			pstmt.setInt(2, depth);
 			int count = pstmt.executeUpdate();
 			
 			result = (count > 0);
@@ -266,6 +318,8 @@ public class BoardDao {
 		
 		return result;
 	}
+
+	
 
 	
 

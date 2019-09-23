@@ -17,36 +17,41 @@ public class ListAction implements Actionable {
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		String keyword = request.getParameter("keyword");
-		final int pageRows = 5;
-		
 		List<BoardVo> list = null;
-		if(keyword != null) {				//찾기 기능
-			list = new BoardDao().getList(keyword, pageRows);
-		} else {
-			list = new BoardDao().getList(pageRows);	
+		int totalRows;
+		final int pageRows = 5;
+		int currentPage = 1;	
+		String keyword = request.getParameter("keyword");
+	
+		String currentPageStr = request.getParameter("currentPage");	
+		if(currentPageStr != null) {
+			currentPage = Integer.parseInt(currentPageStr);
 		}
 		
-		request.setAttribute("list", list);
+		if(keyword != null) {				//찾기 기능
+			BoardDao bdao = new BoardDao();
+			totalRows = new BoardDao().getListCount(keyword);
+			list = new BoardDao().getList(keyword, pageRows, currentPage);
+		} else {
+			totalRows = new BoardDao().getListCount();
+			list = new BoardDao().getList(pageRows, currentPage);
+			keyword="";
+		}
 		
-		processPagingk(list, request, pageRows);
+		request.setAttribute("list", list);		
+		processPagingk(list, request, pageRows, currentPage, totalRows);
 		
-		WebUtils.forward(request, response, "/WEB-INF/views/board/list.jsp");
+		WebUtils.forward(request, response, "/WEB-INF/views/board/list.jsp?keyword=" + keyword);
 	}
 	
-	public void processPagingk(List<BoardVo> list, HttpServletRequest request, int pageRows) {
-		String currentPageStr = request.getParameter("currentPage");
+	public void processPagingk(List<BoardVo> list, HttpServletRequest request, int pageRows, int currentPage, int totalRows) {
 		String currentPageBlockStr = request.getParameter("currentPageBlock");
 		
 		final int pageBlockSize = 5;
-		int totalRows = list.size();	
 		int totalPage = (totalRows / pageRows) + 1;
-		int currentPage = 1;
 		int currentPageBlock = 1;
 		int firstPage;
 		int lastPage;
-		if(currentPageStr != null)
-			currentPage = Integer.parseInt(currentPageStr);
 		
 		if(currentPageBlockStr != null)
 			currentPageBlock = Integer.parseInt(currentPageBlockStr);
@@ -63,7 +68,6 @@ public class ListAction implements Actionable {
 		request.setAttribute("firstPage", firstPage);
 		request.setAttribute("lastPage", lastPage);
 		request.setAttribute("pageRows", pageRows);
-		
-		
 	}
+	
 }

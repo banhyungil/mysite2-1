@@ -1,3 +1,6 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -33,7 +36,9 @@
 				
 					<a href="${pageContext.servletContext.contextPath }/board?a=list">글목록</a>
 					<a href="${pageContext.servletContext.contextPath }/board?a=modifyform&no=${vo.no}">글수정</a>
-					<a href="${pageContext.servletContext.contextPath }/board?a=writeform&boardNo=${vo.no}">답글</a>
+					<c:if test="${!empty authUser }">
+						<a href="${pageContext.servletContext.contextPath }/board?a=writeform&boardNo=${vo.no}">답글</a>
+					</c:if>
 				</div>
 			</div>
 		</div>

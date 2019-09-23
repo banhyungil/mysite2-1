@@ -23,7 +23,8 @@ public class InsertAction implements Actionable{
 		Long userNo = vo.getNo();
 		
 		String boardNoStr = request.getParameter("boardNo");
-		if(boardNoStr == null) { 	//새글인 경우
+		
+		if(boardNoStr == null || boardNoStr.isEmpty()) { 	//새글인 경우
 			new BoardDao().insert(title,content, userNo);
 		} else {				//답글인 경우
 			Long boardNo = Long.parseLong(boardNoStr);

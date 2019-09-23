@@ -24,6 +24,7 @@ public class WriteFormAction implements Actionable {
 		
 		//로그인이된 경우
 		String boardNoStr = request.getParameter("boardNo");
+		System.out.println("boardNoStr " + boardNoStr);
 		if(boardNoStr != null) {
 			Long boardNo = Long.parseLong(boardNoStr);
 			request.setAttribute("boardNo", boardNo);

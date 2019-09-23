@@ -84,6 +84,12 @@ input#kwd	{
 	padding:5px;
 }
 
+.board-form .tbl-ex td.label {
+   text-align:right;
+   font-weight:bold;
+   width:60px; 
+}
+
 tr.even td	{ background-color:#e8ecf6 }
 
 .tbl-ex a { text-decoration:none; font-weight:bold; }

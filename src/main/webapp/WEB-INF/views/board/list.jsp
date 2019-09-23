@@ -20,8 +20,8 @@
 				<form id="search_form"
 					action="${pageContext.servletContext.contextPath }/board?a=list"
 					method="post">
-					<input type="text" id="kwd" name="keyword" value=""> <input
-						type="submit" value="찾기">
+					<input type="text" id="kwd" name="keyword"
+						value="${param.keyword }"> <input type="submit" value="찾기">
 				</form>
 				<table class="tbl-ex">
 					<tr>
@@ -35,8 +35,12 @@
 					<c:forEach items='${list }' var='vo' varStatus='status'>
 						<tr>
 							<td>${status.count }</td>
-							<td><a
-								href="${pageContext.servletContext.contextPath }/board?a=contentsform&no=${vo.no}">${vo.title }</a></td>
+							<td class="label" style="padding-left:${30*vo.depth-20}px;text-align:left">
+							<c:if test="${vo.depth > 0}">
+								<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' />
+							</c:if> 
+							<a href="${pageContext.servletContext.contextPath }/board?a=contentsform&no=${vo.no}">${vo.title }</a>
+							</td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
@@ -52,11 +56,15 @@
 				<!-- pager 추가 -->
 				<div class="pager">
 					<ul>
-						<li><a href="${pageContext.servletContext.contextPath }/board?a=list&currentPageBlock=${currentPageBlock }">◀</a></li>
-						<c:forEach begin='${firstPage }' end='${lastPage }' step='1' var='i'>
-							<li><a href="${pageContext.servletContext.contextPath }/board?a=list&currentPage=${i }">${i }</a></li>
+						<li><a
+							href="${pageContext.servletContext.contextPath }/board?a=list&currentPageBlock=${currentPageBlock }&keyword=${param.keyword }">◀</a></li>
+						<c:forEach begin='${firstPage }' end='${lastPage }' step='1'
+							var='page'>
+							<li><a
+								href="${pageContext.servletContext.contextPath }/board?a=list&currentPage=${page }">${page }</a></li>
 						</c:forEach>
-						<li><a href="${pageContext.servletContext.contextPath }/board?a=list&currentPageBlock=${currentPageBlock}">▶</a></li>
+						<li><a
+							href="${pageContext.servletContext.contextPath }/board?a=list&currentPageBlock=${currentPageBlock}&keyword=${param.keyword }">▶</a></li>
 					</ul>
 				</div>
 				<!-- pager 추가 -->
