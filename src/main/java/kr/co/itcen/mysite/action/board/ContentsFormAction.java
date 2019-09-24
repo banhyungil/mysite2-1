@@ -16,7 +16,10 @@ public class ContentsFormAction implements Actionable{
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long no = Long.parseLong(request.getParameter("no"));
-		BoardVo vo = new BoardDao().get(no);
+		BoardDao boardDao = new BoardDao();
+		BoardVo vo = boardDao.get(no);
+		boardDao.updateHit(no);
+		
 		request.setAttribute("vo", vo);
 		
 		WebUtils.forward(request, response, "WEB-INF/views/board/contentsform.jsp");	

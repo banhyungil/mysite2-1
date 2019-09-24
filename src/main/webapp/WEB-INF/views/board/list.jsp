@@ -35,16 +35,24 @@
 					<c:forEach items='${list }' var='vo' varStatus='status'>
 						<tr>
 							<td>${status.count }</td>
-							<td class="label" style="padding-left:${30*vo.depth-20}px;text-align:left">
-							<c:if test="${vo.depth > 0}">
-								<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' />
-							</c:if> 
-							<a href="${pageContext.servletContext.contextPath }/board?a=contentsform&no=${vo.no}">${vo.title }</a>
-							</td>
+							<td class="label"
+								style="padding-left:${30*vo.depth-20}px;text-align:left">
+								<c:if test="${vo.depth > 0}">
+									<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png' />
+								</c:if>
+								 <c:choose>
+									<c:when test="${vo.status eq 1 }">
+										<a href="${pageContext.servletContext.contextPath }/board?a=contentsform&no=${vo.no}">${vo.title }</a>
+									</c:when>
+									<c:otherwise>
+										삭제된 게시글입니다.
+									</c:otherwise>
+								</c:choose>
+								</td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<c:if test="${authUser.no eq vo.userNo }">
+							<c:if test="${authUser.no eq vo.userNo && vo.status eq 1}">
 								<td><a
 									href="${pageContext.servletContext.contextPath }/board?a=delete&no=${vo.no}"
 									class="del">삭제</a></td>

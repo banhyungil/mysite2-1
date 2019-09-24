@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import kr.co.itcen.mysite.dao.BoardDao;
+import kr.co.itcen.mysite.vo.BoardVo;
 import kr.co.itcen.mysite.vo.UserVo;
 import kr.co.itcen.web.WebUtils;
 import kr.co.itcen.web.mvc.Actionable;
@@ -26,9 +27,13 @@ public class InsertAction implements Actionable{
 		
 		if(boardNoStr == null || boardNoStr.isEmpty()) { 	//새글인 경우
 			new BoardDao().insert(title,content, userNo);
-		} else {				//답글인 경우
+		} else {											//답글인 경우
 			Long boardNo = Long.parseLong(boardNoStr);
-			new BoardDao().insert(title, content, userNo, boardNo);
+			
+			BoardDao boardDao = new BoardDao();
+			BoardVo boardVo = boardDao.get(boardNo);
+			boardDao.update(boardVo.getgNo(), boardVo.getoNo() + 1);
+			boardDao.insert(title, content, userNo, boardNo);
 		}
 		
 		

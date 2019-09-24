@@ -43,6 +43,7 @@ public class BoardDao {
 				vo.setUserName(rs.getString("name"));
 				vo.setUserNo(rs.getInt("user_no"));
 				vo.setDepth(rs.getInt("depth"));
+				vo.setStatus(rs.getInt("status"));
 				
 				list.add(vo);
 			}
@@ -84,6 +85,7 @@ public class BoardDao {
 				vo.setUserName(rs.getString("name"));
 				vo.setUserNo(rs.getInt("user_no"));
 				vo.setDepth(rs.getInt("depth"));
+				vo.setStatus(rs.getInt("status"));
 				
 				list.add(vo);
 			}
@@ -172,23 +174,28 @@ public class BoardDao {
 	 */
 	public Boolean insert(String title, String content, Long userNo, Long boardNo) {
 		connection();
-		
+		System.out.println("inset()");
 		Boolean result = false;
 		BoardVo vo = get(boardNo);
 		
-		String sql = "insert into board(no, title, contents, hit, reg_date, g_no, o_no, depth, user_no) values (null,?,?,0,now(), ?, 2, ?, ?)";
+		
+		String sql = "insert into board(no, title, contents, hit, reg_date, g_no, o_no, depth, user_no) values (null,?,?,0,now(), ?, ?, ?, ?)";
 		try {
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setString(1, title);
 			pstmt.setString(2, content);
 			pstmt.setInt(3, vo.getgNo());
-			pstmt.setInt(4, vo.getDepth() + 1);
-			pstmt.setLong(5, userNo);
+			pstmt.setInt(4, vo.getoNo() + 1);
+			pstmt.setInt(5, vo.getDepth() + 1);
+			pstmt.setLong(6, userNo);
+			
 			
 			int count = pstmt.executeUpdate();
+			System.out.println(count);
 			result = (count > 0);
 			
-			update(vo.getgNo(), vo.getDepth() + 1);
+			
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -279,15 +286,15 @@ public class BoardDao {
 		return result;
 	}
 	
-	public Boolean update(int gNo, int depth) {
+	public Boolean update(int gNo, int oNo) {
 		Boolean result = false;
 		
 		connection();
-		String sql = "update board set o_no = o_no + 1 where g_no=? and depth = ?";
+		String sql = "update board set o_no = o_no + 1 where g_no=? and o_no >= ?";
 		try {
 			pstmt = connection.prepareStatement(sql);
 			pstmt.setInt(1, gNo);
-			pstmt.setInt(2, depth);
+			pstmt.setInt(2, oNo);
 			int count = pstmt.executeUpdate();
 			
 			result = (count > 0);
@@ -296,6 +303,46 @@ public class BoardDao {
 			e.printStackTrace();
 		}
 		
+		
+		return result;
+	}
+	
+	public Boolean updateStatus(Long no) {
+		connection();
+		
+		Boolean result = false;
+		String sql = "update board set status=2 where no=?";
+		try {
+			pstmt = connection.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			int count = pstmt.executeUpdate();
+			result = (count == 1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		
+		return result;
+	}
+	
+	public Boolean updateHit(Long no) {
+		connection();
+		
+		Boolean result = false;
+		String sql = "update board set hit=hit+1 where no=?";
+		try {
+			pstmt = connection.prepareStatement(sql);
+			pstmt.setLong(1, no);
+			int count = pstmt.executeUpdate();
+			result = (count == 1);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close();
+		}
 		
 		return result;
 	}

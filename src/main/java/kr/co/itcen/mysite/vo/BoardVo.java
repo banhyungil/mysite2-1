@@ -9,6 +9,14 @@ public class BoardVo {
 	private int gNo;
 	private int oNo;
 	private int depth;
+	private int status;
+	
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
 	public int getDepth() {
 		return depth;
 	}

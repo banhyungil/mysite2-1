@@ -7,6 +7,7 @@ public class UserVo {
 	private String password;
 	private String gender;
 	private String join_date;
+	
 	public Long getNo() {
 		return no;
 	}

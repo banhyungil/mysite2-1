@@ -16,7 +16,7 @@ public class DeleteAction implements Actionable {
 	public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Long no = Long.parseLong(request.getParameter("no"));
 		
-		Boolean isSuccess = new BoardDao().delete(no);
+		Boolean isSuccess = new BoardDao().updateStatus(no);
 		if(!isSuccess) {
 			System.out.println("Delete 실패");
 			return;

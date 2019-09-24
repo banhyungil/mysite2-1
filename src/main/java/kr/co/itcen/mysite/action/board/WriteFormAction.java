@@ -17,20 +17,20 @@ public class WriteFormAction implements Actionable {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
 		
+		//로그인이 되지 않았을 경우	
 		if(session == null || session.getAttribute("authUser") == null) { 	
-			response.sendRedirect(request.getContextPath() + "/board");			//로그인이 되지 않았을 경우		
+			response.sendRedirect(request.getContextPath() + "/board");				
 			return;
 		}
 		
 		//로그인이된 경우
 		String boardNoStr = request.getParameter("boardNo");
-		System.out.println("boardNoStr " + boardNoStr);
+
 		if(boardNoStr != null) {
 			Long boardNo = Long.parseLong(boardNoStr);
 			request.setAttribute("boardNo", boardNo);
 		}
 			
-		
 		WebUtils.forward(request, response, "/WEB-INF/views/board/writeform.jsp");
 	}
 
